@@ -1,0 +1,2 @@
+[localhost]
+twanalytics.com ansible_host=127.0.0.1 ansible_user=vagrant ansible_ssh_pass=vagrant ansible_port=2222

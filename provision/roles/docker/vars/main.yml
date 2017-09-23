@@ -1,0 +1,6 @@
+---
+
+keyserver: p80.pool.sks-keyservers.net
+keyid: 58118E89F3A912897C070ADBF76221572C52609D
+repo: "deb https://apt.dockerproject.org/repo ubuntu-trusty main"
+linux_image_extra_version: "virtual"

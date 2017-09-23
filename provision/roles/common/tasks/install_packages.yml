@@ -1,0 +1,59 @@
+---
+
+- name: Ensure bash, OpenSSl, tzdata, and libssl are the latest versions
+  apt: >
+    name={{ item }}
+    update_cache={{ update_apt_cache }}
+    state=latest
+    cache_valid_time={{ cache_valid_time }}
+  with_items:
+    - bash
+    - openssl
+    - libssl-dev
+    - libssl-doc
+    - tzdata
+  tags:
+    - packages
+
+- name: Install kipp debian packages dependencies
+  apt: >
+    name={{ item }}
+    update_cache={{ update_apt_cache }}
+    state=latest
+    cache_valid_time={{ cache_valid_time }}
+  with_items:
+    - python-dev
+    - libffi-dev
+    - libssl-dev
+    - libxml2-dev
+    - libxslt1-dev
+    - git
+    - vim
+    - ntp
+    - htop
+    - python-pip
+    - python-dev
+    - gettext
+    - libffi-dev
+    - libyaml-dev
+    - libfreetype6-dev
+    - libjpeg-dev
+    - supervisor
+  tags:
+    - packages
+
+- name: Ugrade pip
+  pip: name=pip extra_args='--upgrade'
+  tags:
+    - packages
+    - venv
+
+- name: Install virtualenv, virtualenvwrapper
+  pip: name={{ item }} extra_args='--upgrade --ignore-installed six'
+  with_items:
+    - virtualenv
+    - virtualenvwrapper
+
+  tags:
+    - packages
+    - venv

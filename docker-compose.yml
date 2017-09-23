@@ -1,15 +1,45 @@
-version: '2'
+version: "2"
 services:
   zookeeper:
     image: wurstmeister/zookeeper
     ports:
       - "2181:2181"
+
   kafka:
     image: wurstmeister/kafka
     ports:
       - "9092:9092"
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: docker
+      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker. sock
+
+  elasticsearch:
+    image: elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+    - ES_JAVA_OPTS=-Xmx256m -Xms256m
+
+  kibana:
+    image: kibana
+    volumes:
+      - ./kibana/config/:/usr/share/kibana/config
+    ports:
+      - 5601:5601
+    depends_on: 
+      - elasticsearch
+
+  pyspark:
+    image: jupyter/pyspark-notebook
+    ports:
+      - "8888:8888"
+      - "4040:4040"
+      - "4041:4041"
+    environment:
+    - ES_JAVA_OPTS=-Xmx256m -Xms256m
+    volumes:
+      - /apps/twitter_analytics/twitter_analytics:/home/jovyan/work
+    command: start-notebook.sh --NotebookApp.token='' --NotebookApp.password_required=False

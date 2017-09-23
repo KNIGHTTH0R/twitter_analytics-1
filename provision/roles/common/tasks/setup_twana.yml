@@ -1,0 +1,41 @@
+---
+
+- name: create .bash_profile file
+  file: path=/home/{{app_user}}/.bash_profile state=touch mode="u=rw,g=r,o=r" owner={{app_user}}
+  tags:
+    - venv
+
+- name: source .bash_profile in .bashrc
+  lineinfile: dest=/home/{{ app_user }}/.bashrc line="source $HOME/.bash_profile"
+
+- name: add virtualenvwrapper defaults to bash_profile
+  lineinfile: dest=/home/{{ app_user }}/.bash_profile line="export WORKON_HOME={{ project_top_dir }};export VIRTUALENVWRAPPER_HOOK_DIR=/home/{{ app_user }}/.virtualenvs;source /usr/local/bin/virtualenvwrapper.sh"
+  tags:
+    - venv
+
+- name: create virtual env using virtualenvwrapper
+  shell: /bin/bash -c "source /usr/local/bin/virtualenvwrapper.sh && mkvirtualenv -a {{project_path}} {{project_name}} && add2virtualenv {{project_path}}"
+  environment:
+    WORKON_HOME: "{{project_top_dir}}"
+    VIRTUALENVWRAPPER_HOOK_DIR: "/home/{{app_user}}/.virtualenvs"
+  args:
+    creates: "{{virtualenv_path}}/bin"
+  tags:
+    - venv
+
+- name: ensure the application file permissions are set properly
+  file: path={{virtualenv_path}}
+        recurse=yes
+        owner={{app_user}}
+        group={{app_group}}
+        state=directory
+
+- name: install setuptools version 28.8.0 inside virtualenv
+  pip: virtualenv={{virtualenv_path}} name=setuptools version=28.8.0
+  tags:
+    - venv
+
+- name: install python packages required inside virtual env
+  pip: virtualenv={{virtualenv_path}} requirements={{requirements_file}}
+  tags:
+    - venv

@@ -1,0 +1,12 @@
+---
+
+- name: provision twitter_analytics "Local"
+  hosts: localhost
+  remote_user: vagrant
+  become: yes
+  become_method: sudo
+  serial: 1
+  roles:
+  - role: common
+  - role: docker
+  - role: compose

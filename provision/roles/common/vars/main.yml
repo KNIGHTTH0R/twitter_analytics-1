@@ -1,0 +1,18 @@
+---
+
+# Package configuration
+update_apt_cache: yes
+cache_valid_time: 3600
+
+# System users for kipp
+app_user: twana
+app_group: twana
+
+# Project settings
+project_name: twitter_analytics
+project_top_dir: "/apps"
+project_root: "{{ project_top_dir }}/{{ project_name }}"
+virtualenv_path: "{{ project_top_dir }}/{{ project_name }}"
+project_path: "{{ virtualenv_path }}/{{ project_name }}"
+requirements_file: "{{ project_path }}/requirements.txt"
+git_repo: git@github.com:ahmedezzeldin93/twitter_analytics.git

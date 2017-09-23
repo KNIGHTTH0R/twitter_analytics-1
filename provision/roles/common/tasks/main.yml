@@ -1,0 +1,8 @@
+- include: install_packages.yml
+  tags: packages
+
+- include: create_users_and_groups.yml
+  tags: users
+
+- include: setup_twana.yml
+  tags: packages
